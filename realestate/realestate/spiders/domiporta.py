@@ -2,12 +2,15 @@ import scrapy
 from bs4 import BeautifulSoup
 import requests
 import re
+import psycopg2
 
 
 class DomiportaSpider(scrapy.Spider):
     name = "domiporta"
     allowed_domains = ["domiporta.pl"]
     start_urls = ["https://www.domiporta.pl/mieszkanie/sprzedam"]
+    conn = psycopg2.connection(dbname= "postgres", user= "Kuba", password= "postgres")
+    cur = conn.cursor()
 
     def parse(self, response):
         soup = BeautifulSoup(response.text, "lxml")
@@ -98,3 +101,7 @@ class DomiportaSpider(scrapy.Spider):
         r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.content, "lxml")
         return soup
+
+    def insert_to_sql(self, item):
+        self.cur.execute(f'''INSERT INTO OFFERS({",".join(item.keys())}) VALUES {tuple(item.values())}''')
+        self.conn.commit()

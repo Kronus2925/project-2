@@ -1,4 +1,5 @@
 import scrapy
+from realestate import items
 
 class Domiporta1Spider(scrapy.Spider):
     name = "domiporta1"
@@ -22,11 +23,16 @@ class Domiporta1Spider(scrapy.Spider):
 
     def parse_items(self, response):
 
-        yield {
-            "price": response.xpath(
+    
+            item = items.RealestateItem()
+
+            item['price'] = response.xpath(
                 "//span[@class='features__item_value features__item_value--price']/p/text()"
+            ).get()
+        
+            item['offer_number'] = response.xpath(
+                "//span[normalize-space()='Numer oferty']//span/text()"
             ).get(),
-            "offer_number": response.xpath(
-                "//span[normalize-space()='Numer oferty']/span/text()"
-            ).get(),
-        }
+
+            yield items.RealestateItem
+        
