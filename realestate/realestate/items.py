@@ -3,7 +3,7 @@ from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose, TakeFirst, Compose
 
 def remove_currency(value):
-    if value is not '0':
+    if value != '0':
         return value.strip().replace('\xa0','').replace(' zł','')
     else:
         return value

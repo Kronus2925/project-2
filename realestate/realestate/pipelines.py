@@ -15,9 +15,22 @@ class RealestatePipeline:
         self.cur = self.conn.cursor()
 
         self.cur.execute(
-            """CREATE TABLE IF NOT EXISTS offers(price varchar(100), offer_number varchar(100), material varchar(100), square_footage varchar(100), construction_year varchar(100), number_of_rooms varchar(100), price_per_m2 varchar(100), city varchar(100), address varchar(100), region varchar(100))"""
+            """CREATE TABLE IF NOT EXISTS offers(price varchar(100),
+            offer_number varchar(100),
+            material varchar(100),
+            square_footage varchar(100), 
+            construction_year varchar(100), 
+            number_of_rooms varchar(100), 
+            price_per_m2 varchar(100), 
+            city varchar(100), 
+            address varchar(100), 
+            region varchar(100))"""
         )
 
+    def set_default_item(self, item, spider):
+        item.setdefault('price', 'NULL')
+        return item
+        
     def process_item(self, item, spider):
 
         self.cur.execute(
