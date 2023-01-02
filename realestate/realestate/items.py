@@ -8,6 +8,10 @@ def remove_currency(value):
     else:
         return value
 
+def name_parse(value):
+    if value:
+        return value.replace("'", '')
+
 def remove_square_meters(value):
     if value:
         return value.replace('/m','')
@@ -42,9 +46,11 @@ class RealestateItem(Item):
         output_processor = TakeFirst()
     )
     city = Field(
+        input_processor = MapCompose(name_parse),
         output_processor = TakeFirst()
-    )
+        )
     address = Field(
+        input_processor = MapCompose(name_parse),
         output_processor = TakeFirst()
     )
     region = Field(
